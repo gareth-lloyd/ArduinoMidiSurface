@@ -1,7 +1,8 @@
 #ifndef MidiSurface_h
 #define MidiSurface_h
 
-#include "Arduino.h"
+#include <Arduino.h>
+
 #include <MIDI.h>
 #include <midi_Defs.h>
 #include <midi_Message.h>
@@ -34,11 +35,27 @@ typedef struct {
   int value;
 } DigitalControl;
 
-int scaleToCCRange(int reading, int CCMin, int CCMax);
+class MidiSurface {
 
-void scanAnalogControl(MidiInterface& midi, AnalogControl& control);
+  public:
+    midi::MidiInterface<HardwareSerial>* midiInterface;
+    int outChannel;
 
-void scanDigitalControl(MidiInterface& midi, DigitalControl& control);
+    MidiSurface(midi::MidiInterface<HardwareSerial>* midiI, int outChannel);
 
-void performDigitalControl(MidiInterface& midi, DigitalControl& control);
+    int scaleToCCRange(int reading, int CCMin, int CCMax);
+
+    void scanAnalogControl(
+      AnalogControl& control
+    );
+
+    void scanDigitalControl(
+      DigitalControl& control
+    );
+
+    void performDigitalControl(
+      DigitalControl& control
+    );
+
+};
 #endif
